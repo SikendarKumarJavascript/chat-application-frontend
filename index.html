@@ -55,41 +55,6 @@
           <div class="msg_history">
            
           
-
-      
-
-            <!-- 
-              this is my comment
-              <div class="outgoing_msg">
-              <div class="sent_msg">
-                <p>Apollo University, Delhi, India Test</p>
-                <span class="time_date"> 11:01 AM | Today</span>
-              </div>
-            </div> -->
-
-            <!-- 
-              this is user comment
-              <div class="incoming_msg">
-              <div class="incoming_msg_img">
-                <img
-                  src="https://ptetutorials.com/images/user-profile.png"
-                  alt="sunil"
-                />
-              </div>
-              <div class="received_msg">
-                <div class="received_withd_msg">
-                  <p>
-                    We work directly with our designers and suppliers, and sell
-                    direct to you, which means quality, exclusive products, at a
-                    price anyone can afford.
-                  </p>
-                  <span class="time_date"> 11:01 AM | Today</span>
-                </div>
-              </div>
-            </div> -->
-
-
-
           </div>
           <div class="type_msg">
             <form id="sendData">
@@ -122,12 +87,12 @@ const n = date.toDateString();
 const time = date.toLocaleTimeString();
 
      
-     const socket = io('https://chat-server-data.onrender.com')
-
+      const socket = io('https://chat-server-data.onrender.com')
       const sendData = document.querySelector('#sendData');
       const massageInput = document.querySelector('.write_msg');
       const chatDiv = document.querySelector('.msg_history');
 
+      // send message
       const messageRead =(message, position) =>{
         const parentdiv = document.createElement('div');
         const messageElement = document.createElement('div');
@@ -151,6 +116,31 @@ const time = date.toLocaleTimeString();
         messageRead(`${message}` ,'right')
         massageInput.value = ""
       })
+
+
+       // receive message
+     socket.on("new-message",(data)=>{
+        const parentdiv = document.createElement('div');
+        const imageElement = document.createElement('div');
+        const img = document.createElement('img');
+        const messageElement = document.createElement('received_msg');
+        const received_withd_msg = document.createElement('received_withd_msg');
+        const span = document.createElement('span');
+        const ptag = document.createElement('p');        
+        parentdiv.classList.add('incoming_msg')
+        messageElement.classList.add('incoming_msg_img')
+        span.classList.add('time_date')
+        ptag.innerHTML = message
+        span.innerHTML = time
+        received_withd_msg.appendChild(span)
+        received_withd_msg.appendChild(ptag)
+        messageElement.appendChild(received_withd_msg)
+        parentdiv.appendChild(messageElement)
+        img.src = "https://ptetutorials.com/images/user-profile.png"
+        messageElement.appendChild(img)
+        parentdiv.appendChild(imageElement)
+        chatDiv.appendChild(parentdiv)
+     })
 
 
 
@@ -214,6 +204,7 @@ const time = date.toLocaleTimeString();
       };
 
       const addData = (data) => {
+        
         let profile = JSON.parse(data);
         sessionStorage.setItem("id", profile.id);
         sessionStorage.setItem("usernames", profile.username);

@@ -1,7 +1,4 @@
-.container{
-    max-width:900px;
-    /* height: 100vh; */
-}
+
 .inbox_people {
 	background: #fff;
 	float: left;
@@ -9,16 +6,15 @@
 	width: 30%;
 	border-right: 1px solid #ddd;
 }
-
+body{
+	overflow: hidden!important;
+	box-sizing: border-box!important;
+}
 .inbox_msg {
 	border: 1px solid #ddd;
 	clear: both;
 	overflow: hidden;
 }
-
-/* .top_spac {
-	margin: 20px 0 0;
-} */
 tr{
 	cursor: pointer;
 }
@@ -166,8 +162,9 @@ tr{
 	float: left;
 	padding: 0 15px 0 25px;
 	width:70%;
-	height: 90vh;
+	height: 100vh;
 	position: relative;
+	overflow: hidden!important;
 }
 
 .sent_msg p {
@@ -209,6 +206,8 @@ tr{
     right: 0;
 	bottom: 0;
 	width: 100%;
+	background: #fff;
+	z-index: 8478;
 }
 
 .msg_send_btn {
@@ -228,7 +227,7 @@ tr{
 
 .messaging {
 	padding: 0 0;
-    
+    overflow: hidden!important;
 }
 
 .msg_history {
