@@ -44,7 +44,7 @@ signIndata.addEventListener('submit', (event)=>{
     let email = signIndata.email.value
     let phone = signIndata.phone.value
 
-    let url = 'http://localhost:8080/api/register'
+    let url = 'https://chat-server-data.onrender.com/api/register'
 
     axios.post(url,{
        username,email,phone

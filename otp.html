@@ -34,7 +34,7 @@
 
     event.preventDefault()
     let otp = otpdata.otp.value
-    let url = 'http://localhost:8080/api/otp'
+    let url = 'https://chat-server-data.onrender.com/api/otp'
     let email = window.localStorage.getItem("email")
      axios.post(url,{
        otp,email

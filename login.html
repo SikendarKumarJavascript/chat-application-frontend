@@ -36,7 +36,7 @@ logindata.addEventListener('submit', (event)=>{
 
     event.preventDefault()
     let email = logindata.email.value
-    let url = 'http://localhost:8080/api/login'
+    let url = 'https://chat-server-data.onrender.com/api/login'
 
      axios.post(url,{
        email

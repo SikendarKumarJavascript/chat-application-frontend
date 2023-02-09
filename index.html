@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>chat application</title>
-    <script src="http://localhost:8080/socket.io/socket.io.js"></script>
+    <script src="https://chat-server-data.onrender.com/socket.io/socket.io.js"></script>
     <link
       rel="stylesheet"
       href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
@@ -122,7 +122,7 @@ const n = date.toDateString();
 const time = date.toLocaleTimeString();
 
      
-     const socket = io('http://localhost:8080')
+     const socket = io('https://chat-server-data.onrender.com')
 
       const sendData = document.querySelector('#sendData');
       const massageInput = document.querySelector('.write_msg');
@@ -196,7 +196,7 @@ const time = date.toLocaleTimeString();
 
       //   load function
       const send_token = (cteate_token) => {
-        let url = "http://localhost:8080/api/users";
+        let url = "https://chat-server-data.onrender.com/api/users";
 
         axios
           .post(url, "", {
@@ -229,7 +229,7 @@ const time = date.toLocaleTimeString();
 
         send_token(cteate_token);
 
-        let url = "http://localhost:8080/api/profile";
+        let url = "https://chat-server-data.onrender.com/api/profile";
         axios
           .post(url, "", {
             headers: {
