@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>chat application</title>
+    <script src="http://localhost:8080/socket.io/socket.io.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+    />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <link
+      href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
+      rel="stylesheet"
+      id="bootstrap-css"
+    />
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!-- link style -->
+    <link rel="stylesheet" href="style.css" />
+    <div class="messaging">
+      <div class="inbox_msg">
+        <div class="inbox_people">
+          <div class="headind_srch">
+            <div class="recent_heading">
+              <h4>Chats</h4>
+              <p id="name"></p>
+            </div>
+            <div class="srch_bar">
+              <div class="stylish-input-group">
+                <input type="text" class="search-bar" placeholder="Search" />
+              </div>
+            </div>
+          </div>
+          <div class="inbox_chat scroll">
+            <div class="chat_list active_chat">
+              <!-- user list -->
+              <table class="table table-hover">
+                <tbody>
+                 <tr class="active_chat_list"></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="mesgs">
+          <div class="msg_history">
+           
+          
+
+      
+
+            <!-- 
+              this is my comment
+              <div class="outgoing_msg">
+              <div class="sent_msg">
+                <p>Apollo University, Delhi, India Test</p>
+                <span class="time_date"> 11:01 AM | Today</span>
+              </div>
+            </div> -->
+
+            <!-- 
+              this is user comment
+              <div class="incoming_msg">
+              <div class="incoming_msg_img">
+                <img
+                  src="https://ptetutorials.com/images/user-profile.png"
+                  alt="sunil"
+                />
+              </div>
+              <div class="received_msg">
+                <div class="received_withd_msg">
+                  <p>
+                    We work directly with our designers and suppliers, and sell
+                    direct to you, which means quality, exclusive products, at a
+                    price anyone can afford.
+                  </p>
+                  <span class="time_date"> 11:01 AM | Today</span>
+                </div>
+              </div>
+            </div> -->
+
+
+
+          </div>
+          <div class="type_msg">
+            <form id="sendData">
+            <div class="input_msg_write">
+              <input
+                type="text"
+                class="write_msg"
+                placeholder="Type a message"
+              />
+              <button class="msg_send_btn" type="submit">
+                <i class="fa fa-paper-plane" aria-hidden="true"></i>
+              </button>
+            </div>
+          </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--  -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+   
+  </head>
+  <body>
+    <script>
+
+
+const date = new Date();
+const n = date.toDateString();
+const time = date.toLocaleTimeString();
+
+     
+     const socket = io('http://localhost:8080')
+
+      const sendData = document.querySelector('#sendData');
+      const massageInput = document.querySelector('.write_msg');
+      const chatDiv = document.querySelector('.msg_history');
+
+      const messageRead =(message, position) =>{
+        const parentdiv = document.createElement('div');
+        const messageElement = document.createElement('div');
+        const span = document.createElement('span');
+        const ptag = document.createElement('p');
+        parentdiv.classList.add('outgoing_msg')
+        messageElement.classList.add('sent_msg')
+        span.classList.add('time_date')
+        ptag.innerHTML = message
+        span.innerHTML = time
+        messageElement.appendChild(span)
+        messageElement.appendChild(ptag)
+        parentdiv.appendChild(messageElement)
+        chatDiv.appendChild(parentdiv)
+      }
+
+      sendData.addEventListener("submit",(event)=>{
+        event.preventDefault();
+        const message = massageInput.value;
+        socket.emit("send",message)
+        messageRead(`${message}` ,'right')
+        massageInput.value = ""
+      })
+
+
+
+     
+      if (!document.cookie) {
+        window.location = "login.html";
+      }
+
+      const token = document.cookie;
+      const cteate_token = token.replace(
+        "wesfhs5afgysdgfuiif459vgt748bjhfukn=",
+        ""
+      );
+      // list active chat
+
+      const chatList = (data) => {
+        const chat_list = document.querySelector(".active_chat_list");
+        let users = {};
+        let chatList = JSON.parse(data);
+        const mydata = sessionStorage.getItem("id");
+
+        const Userresult = chatList.filter((el) => -1 == mydata.indexOf(el.id));
+
+        Userresult.forEach((element) => {
+          users = `
+            <tr class="pt-2 w-100 border-0  bg-white" id="${element.id}">
+                <div class="chat_people px-3 py-4">
+                  <div class="chat_img">
+                    <img
+                      src="https://ptetutorials.com/images/user-profile.png"
+                      alt="sunil"
+                    />
+                  </div>
+                  <div class="chat_ib text-left">
+                    <h2>${element.username}</h2>
+                  </div>
+                </div>
+              </tr> 
+        `;
+          chat_list.innerHTML += users;
+        });
+      };
+
+      //   load function
+      const send_token = (cteate_token) => {
+        let url = "http://localhost:8080/api/users";
+
+        axios
+          .post(url, "", {
+            headers: {
+              Authorization: `Bearer ${cteate_token}`,
+            },
+          })
+
+          .then(function (response) {
+            chatList(response.request.response);
+          })
+          .catch(function (error) {
+            return error;
+          });
+      };
+
+      const addData = (data) => {
+        let profile = JSON.parse(data);
+        sessionStorage.setItem("id", profile.id);
+        sessionStorage.setItem("usernames", profile.username);
+        sessionStorage.setItem("email", profile.email);
+        
+        // web socket call
+        document.querySelector('#name').innerHTML = profile.username
+        socket.emit("new-user", profile.username)
+
+      };
+
+      window.addEventListener("load", () => {
+
+        send_token(cteate_token);
+
+        let url = "http://localhost:8080/api/profile";
+        axios
+          .post(url, "", {
+            headers: {
+              Authorization: `Bearer ${cteate_token}`,
+            },
+          })
+
+          .then(function (response) {
+            addData(response.request.response);
+          })
+          .catch(function (error) {
+            return error;
+          });
+      });
+    </script>
+  </body>
+</html>
