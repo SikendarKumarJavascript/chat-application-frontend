@@ -1,34 +1,29 @@
 *{
 	font-family: 'Poppins', sans-serif!important;
+	margin: 0px!important;
+	padding: 0px!important;
 
-}
-.inbox_people {
-	background: #fff;
-	float: left;
-	overflow: hidden;
-	width: 30%;
-	border-right: 1px solid #ddd;
 }
 body{
 	overflow: hidden!important;
 	box-sizing: border-box!important;
 }
-.inbox_msg {
-	border: 1px solid #ddd;
-	clear: both;
-	overflow: hidden;
+.messaging .inbox_msg{
+	width: 100%;
+	height: 100vh;
 }
-li{
-	cursor: pointer;
-	list-style: none;
-}
-li.active{
-	background: #041992!important;
-}
-.recent_heading {
+.inbox_people {
+	background: #fff;
 	float: left;
-	width: 40%;
-	padding: 10px 0;
+	overflow: hidden;
+	width: 22%;
+	height: 100%;
+	border-right: 1px solid #ddd;
+}
+
+
+.recent_heading {
+	font-size: 16px;
 }
 
 .srch_bar {
@@ -48,37 +43,20 @@ li.active{
 	position: relative;
 }
 
-.recent_heading h4 {
-	color: #0465ac;
+.recent_heading p {
+	color: #ffffff;
     font-size: 16px;
     margin: auto;
     line-height: 29px;
+	background: #4111b1;
+	font-weight: 400;
+	text-align: center;
+	padding: 10px 0;
 }
 
-.srch_bar input {
-	outline: none;
-	border: 1px solid #cdcdcd;
-	border-width: 0 0 1px 0;
-	width: 80%;
-	padding: 2px 0 4px 6px;
-	background: none;
-}
 
-.srch_bar .input-group-addon button {
-	background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
-	border: medium none;
-	padding: 0;
-	color: #707070;
-	font-size: 18px;
-}
-
-.srch_bar .input-group-addon {
-	margin: 0 0 0 -27px;
-}
-
-.chat_ib h5 {
+.chat_ib h2 {
 	font-size: 15px;
-	color: #464646;
 }
 
 .chat_ib h5 span {
@@ -94,10 +72,13 @@ li.active{
     overflow: hidden;
     text-overflow: ellipsis;
 }
-
+ul li.active .chat_ib .h2{
+	color: #fff!important;
+}
 .chat_img {
 	float: left;
 	width: 11%;
+	margin-right: 10px;
 }
 
 .chat_img img {
@@ -121,7 +102,7 @@ li.active{
 
 .inbox_chat {
 	height: 90vh;
-	overflow-y: scroll;
+	overflow-y: auto;
 }
 
 .active_chat {
@@ -167,7 +148,7 @@ li.active{
 
 .mesgs{
 	float: left;
-	width:70%;
+	width:78%;
 	height: 100vh;
 	position: relative;
 	overflow: hidden!important;
@@ -187,12 +168,12 @@ li.active{
 }
 
 .sent_msg p {
-	background:#0465ac;
+	background:#0466acc4;
 	border-radius: 12px 15px 15px 0;
-	font-size: 14px;
+	font-size: 18px;
 	margin: 0;
 	color: #fff;
-	padding: 5px 10px 5px 12px;
+	padding: 5px 10px 5px 12px!important;
 	width: 100%;
 }
 
@@ -203,7 +184,7 @@ li.active{
 
 .sent_msg {
 	float: right;
-	width: 46%;
+	width: 60%;
 }
 
 .input_msg_write input {
@@ -214,7 +195,7 @@ li.active{
 	min-height: 48px;
 	width: 90%;
 	outline:none;
-	padding: 20px;
+	padding: 30px 30px!important;
 	font-size: 20px;
 }
 
@@ -236,12 +217,12 @@ li.active{
 	color: #fff;
 	cursor: pointer;
 	font-size: 15px;
-	height: 33px;
+	height: 50px;
 	position: absolute;
 	right: 30px;
 	top: 50%;
 	transform: translateY(-50%);
-	width: 33px;
+	width: 50px;
 }
 
 .messaging {
@@ -250,11 +231,11 @@ li.active{
 }
 
 .msg_history {
-	overflow-y: auto;
-	padding-top: 50px;
+	overflow-y: auto!important;
+	padding-top: 20px!important;
 }
 #name{
-	font-size: 20px;
+	font-size: 18px;	
 }
 .statut_bar{
 	position: relative;
@@ -266,4 +247,64 @@ li.active{
 .typing{
 	font-size: 14px;
 	display: none;
+}
+
+li{
+	cursor: pointer;
+	list-style: none;
+	display: flex!important;
+	justify-content: space-between!important;
+	background: #ececec!important;
+	position: relative!important;
+}
+li.active{
+	background: #041992!important;
+}
+.chat_ib .statcount{
+	position: absolute!important;
+	right: 10px!important;
+	background: #000000;
+	text-align: center;
+	border-radius: 30px;
+	top: 50%;
+	transform: translateY(-50%);
+	width: 30px;
+	color: #fff;
+	font-size: 16px;
+	display: none;
+}
+.statut_bar{
+	display: flex;
+	align-items: center;
+}
+.statut_bar button{
+	background: transparent;
+	font-size: 22px;
+	padding-right: 40px;
+	color: #f8f8f8;
+	outline: none;
+	border: none;
+	text-transform: capitalize;
+	display: none;
+	width: 40px;
+}
+@media screen and (min-width: 780px) {
+	.inbox_people{
+		display: block!important;
+	}
+	.statut_bar button{
+		display: none!important;
+	}
+}
+
+@media screen and (max-width: 780px) {
+	.inbox_people{
+		width: 100%;
+		z-index: 1;
+	}
+
+	.mesgs{
+		width: 100%;
+		display:none;
+	}
 }
