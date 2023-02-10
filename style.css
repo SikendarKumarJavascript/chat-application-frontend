@@ -288,6 +288,11 @@ li.active{
 	display: none;
 	width: 40px;
 }
+.received_withd_msg{
+	font-size: 18px;
+	padding: 5px 10px 5px 12px!important;
+}
+
 @media screen and (min-width: 780px) {
 	.inbox_people{
 		display: block!important;
