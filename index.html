@@ -5,11 +5,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>chat application</title>
-    <script src="https://chat-server-data.onrender.com/socket.io/socket.io.js"></script>
+    
     <link
       rel="stylesheet"
       href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
     />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <link
       rel="stylesheet"
       href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
@@ -50,6 +51,10 @@
           </div>
         </div>
         <div class="mesgs">
+          <div class="statut_bar">
+           
+          <h3 class="username text-white"></h3>
+          </div>
           <div class="msg_history">
            
           
@@ -78,20 +83,27 @@
   </head>
   <body>
     <script>
+      
+    </script>
+    <script src="https://chat-server-data.onrender.com/socket.io/socket.io.js"></script>
+    <!-- <script src="http://localhost:8082/socket.io/socket.io.js"></script> -->
+    <script>
+
+  var baseurl = "https://chat-server-data.onrender.com"
+  // var baseurl = "http://localhost:8082"
+    
 
 
-const date = new Date();
-const n = date.toDateString();
-const time = date.toLocaleTimeString();
+// ------------------------------------------------- logic for api
 
-     
-      const socket = io('https://chat-server-data.onrender.com')
+
+      const socket = io(baseurl)
       const sendData = document.querySelector('#sendData');
       const massageInput = document.querySelector('.write_msg');
       const chatDiv = document.querySelector('.msg_history');
 
       // send message
-      const messageRead =(message, position) =>{
+      const messageRead =(message, date) =>{
         const parentdiv = document.createElement('div');
         const messageElement = document.createElement('div');
         const span = document.createElement('span');
@@ -100,7 +112,7 @@ const time = date.toLocaleTimeString();
         messageElement.classList.add('sent_msg')
         span.classList.add('time_date')
         ptag.innerHTML = message
-        span.innerHTML = time
+        span.innerHTML = date
         messageElement.appendChild(span)
         messageElement.appendChild(ptag)
         parentdiv.appendChild(messageElement)
@@ -109,15 +121,16 @@ const time = date.toLocaleTimeString();
 
       sendData.addEventListener("submit",(event)=>{
         event.preventDefault();
+        let date = new Date().toLocaleTimeString();
         const message = massageInput.value;
-        socket.emit("send",message)
-        messageRead(`${message}` ,'right')
+        socket.emit("send", message ,date)
+        messageRead(message,date)
         massageInput.value = ""
       })
 
 
-       // receive message
-     socket.on("new-message",(data)=>{
+// receive message
+     socket.on("user-left",(message,date)=>{
         const parentdiv = document.createElement('div');
         const imageElement = document.createElement('div');
         const img = document.createElement('img');
@@ -129,7 +142,7 @@ const time = date.toLocaleTimeString();
         messageElement.classList.add('incoming_msg_img')
         span.classList.add('time_date')
         ptag.innerHTML = message
-        span.innerHTML = time
+        span.innerHTML = date
         received_withd_msg.appendChild(span)
         received_withd_msg.appendChild(ptag)
         messageElement.appendChild(received_withd_msg)
@@ -158,8 +171,8 @@ const time = date.toLocaleTimeString();
 
         Userresult.forEach((element) => {
           users = `
-          <li class="list-group-item list-group-item-action " id="${element.id}">
-            <a type="button" href="javascript:void(0)" class="pt-2 w-100 border-0 bg-white cursor-pointer" id="${element.id}">
+          <li class="list-group-item list-group-item-action list-data-btn " id="${element.id}">
+           
                 <div class="chat_people px-3 py-4">
                   <div class="chat_img">
                     <img
@@ -171,16 +184,55 @@ const time = date.toLocaleTimeString();
                     <h2>${element.username}</h2>
                   </div>
                 </div>
-              </a>
+
             </li> 
         `;
           chat_list.innerHTML += users;
+
+
+          
+
+
         });
+        let mesgs = document.querySelector(".mesgs")
+        let ListItem = document.querySelectorAll("li.list-data-btn")
+        for (let index = 0; index < ListItem.length; index++) {
+          ListItem[index].addEventListener("click", (e) =>{
+           
+            ListItem.forEach((notClickedLink) => {
+              notClickedLink.classList.remove('active');
+            });
+            mesgs.style.display = "block"
+            ListItem[index].classList.add('active');
+            // chat-board display
+
+            const display_board_text = document.querySelector(".username")
+            let UserStatus = ListItem[index].getAttribute("id");
+            const userProfile = chatList.filter((items)=> items.id === UserStatus)[0]
+
+            display_board_text.innerText = userProfile.username
+
+            // message sending for user
+
+
+
+
+            
+          
+            
+          })          
+        }
+
+        
+        
+
       };
 
       //   load function
       const send_token = (cteate_token) => {
-        let url = "https://chat-server-data.onrender.com/api/users";
+
+        // console.log(cteate_token);
+        let url = `${baseurl}/api/users`;
 
         axios
           .post(url, "", {
@@ -191,10 +243,13 @@ const time = date.toLocaleTimeString();
 
           .then(function (response) {
             chatList(response.request.response);
+            // console.log(response);
           })
           .catch(function (error) {
-            return error;
+            // return error;
+            console.log(error);
           });
+
       };
 
      
@@ -217,7 +272,7 @@ const time = date.toLocaleTimeString();
 
         send_token(cteate_token);
 
-        let url = "https://chat-server-data.onrender.com/api/profile";
+        let url = `${baseurl}/api/profile`;
         axios
           .post(url, "", {
             headers: {
@@ -232,13 +287,45 @@ const time = date.toLocaleTimeString();
             sessionStorage.setItem("email", response.data.email);
             
             // web socket call
-            document.querySelector('#name').innerHTML = response.data.username
-            socket.emit("new-user", response.data.username)
+            document.querySelector('#name').innerHTML = response.data.username +" profile"
+            socket.emit("new-user", response.data.username , response.data.id)
           })
           .catch(function (error) {
             return error;
+
           });
       });
+
+
+
+// ---------------------------- data for client server --------------------
+
+
+// const chat_list = document.querySelector("li.list-data-btn");
+// // const htmlCollection = chat_list.children;
+// // var arr = Array.prototype.slice.call( htmlCollection )
+
+// console.log(chat_list);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     </script>
   </body>
 </html>
