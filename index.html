@@ -97,7 +97,6 @@
 
   var baseurl = "https://chat-server-data.onrender.com"
   // var baseurl = "http://localhost:8082"
-    
 
 
 // ------------------------------------------------- logic for api
@@ -226,20 +225,12 @@
             mesgs.style.display = "block"
             BackBtn.style.display = "block"
             leftNav.style.display = "none"
-            ListItem[index].requestFullscreen();
-            ListItem[index].webkitRequestFullscreen();
-            ListItem[index].mozRequestFullScreen();
-            ListItem[index].msRequestFullscreen();
-         
             
 
             BackBtn.addEventListener('click',()=>{
               if(leftNav.style.display==="none"){
                 leftNav.style.display = "block"
-                document.exitFullscreen();
-                document.mozCancelFullScreen();
-                document.webkitExitFullscreen();
-                window.top.document.msExitFullscreen();
+                
               }else{
                 leftNav.style.display = "block"
               }

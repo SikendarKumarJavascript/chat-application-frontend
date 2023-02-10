@@ -308,3 +308,16 @@ li.active{
 		display:none;
 	}
 }
+
+@media screen and (max-width: 500px) {
+	.statut_bar{
+		margin-top: 30px;
+	}
+	.type_msg {
+		
+		bottom: 20px;
+		min-height: 150px;		
+	}
+	
+}
+
