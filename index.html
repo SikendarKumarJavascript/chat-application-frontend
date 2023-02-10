@@ -53,6 +53,7 @@
         <div class="mesgs">
           <div class="statut_bar d-flex">
            <button class="backBtn"><i class='bx bx-arrow-back'></i></button>
+           <button class="">fghg</button>
           <h3 class="username text-white ml-3"></h3>
           <p class="typing text-white ml-3">typing...</p>
           
@@ -225,10 +226,20 @@
             mesgs.style.display = "block"
             BackBtn.style.display = "block"
             leftNav.style.display = "none"
+            ListItem[index].requestFullscreen();
+            ListItem[index].webkitRequestFullscreen();
+            ListItem[index].mozRequestFullScreen();
+            ListItem[index].msRequestFullscreen();
+         
+            
 
             BackBtn.addEventListener('click',()=>{
               if(leftNav.style.display==="none"){
                 leftNav.style.display = "block"
+                document.exitFullscreen();
+                document.mozCancelFullScreen();
+                document.webkitExitFullscreen();
+                window.top.document.msExitFullscreen();
               }else{
                 leftNav.style.display = "block"
               }
