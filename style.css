@@ -262,3 +262,8 @@ li.active{
 	background: #5a7ae2;
 	padding: 10px 20px!important;
 }
+
+.typing{
+	font-size: 14px;
+	display: none;
+}

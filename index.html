@@ -51,11 +51,12 @@
           </div>
         </div>
         <div class="mesgs">
-          <div class="statut_bar">
+          <div class="statut_bar d-flex">
            
-          <h3 class="username text-white"></h3>
+          <h3 class="username text-white ml-3"></h3>
+          <p class="typing text-white ml-3">typing...</p>
           </div>
-          <div class="msg_history">
+          <div class="msg_history px-3">
            
           
           </div>
@@ -76,6 +77,7 @@
         </div>
       </div>
     </div>
+    
 
     <!--  -->
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
@@ -128,29 +130,50 @@
         massageInput.value = ""
       })
 
+      massageInput.addEventListener("input",(event)=>{
+        socket.emit("typing", status)
+      })
+
+      massageInput.addEventListener("mouseleave",(event)=>{
+        socket.emit("stop-typing", statusbar)
+        console.log('hi');
+      })
+
+      // statusbar
+      
+      
+      socket.on("typing", (statusbar)=>{
+         document.querySelector('.typing').style.display= "block"
+      })
+
+      socket.on("stop-typing", (statusbar)=>{
+         document.querySelector('.typing').style.display= "none"
+         console.log(statusbar);
+      })
 
 // receive message
      socket.on("user-left",(message,date)=>{
-        const parentdiv = document.createElement('div');
-        const imageElement = document.createElement('div');
-        const img = document.createElement('img');
-        const messageElement = document.createElement('received_msg');
-        const received_withd_msg = document.createElement('received_withd_msg');
-        const span = document.createElement('span');
-        const ptag = document.createElement('p');        
-        parentdiv.classList.add('incoming_msg')
-        messageElement.classList.add('incoming_msg_img')
-        span.classList.add('time_date')
-        ptag.innerHTML = message
-        span.innerHTML = date
-        received_withd_msg.appendChild(span)
-        received_withd_msg.appendChild(ptag)
-        messageElement.appendChild(received_withd_msg)
-        parentdiv.appendChild(messageElement)
-        img.src = "https://ptetutorials.com/images/user-profile.png"
-        messageElement.appendChild(img)
-        parentdiv.appendChild(imageElement)
-        chatDiv.appendChild(parentdiv)
+        const parentdivs = `
+
+        <div class="incoming_msg mb-3">
+           <div class="incoming_msg_img">
+              <img src="https://ptetutorials.com/images/user-profile.png" alt="img">
+            </div>
+
+      <div class="received_msg">
+        <div class="received_withd_msg">
+          <p>
+            ${message}
+            </p>
+          <span class="time_date">
+            ${date}</span>
+        </div>
+      </div>
+    </div>
+        
+        `
+        
+        chatDiv.innerHTML += parentdivs
      })
 
 
@@ -252,17 +275,17 @@
 
       };
 
-     
+  //  if(!document.cookie) return window.location = "login.html";
 
       window.addEventListener("load", () => {
 
-     
+        if (!document.cookie) {
+        window.location = "login.html";
+      }
 
       
 
-      if (!document.cookie) {
-        window.location = "login.html";
-      }
+     
 
       const token = document.cookie;
       const cteate_token = token.replace(
@@ -271,7 +294,6 @@
         );
 
         send_token(cteate_token);
-
         let url = `${baseurl}/api/profile`;
         axios
           .post(url, "", {
@@ -281,7 +303,8 @@
           })
 
           .then(function (response) {
-           
+
+            console.log(response);
             sessionStorage.setItem("id", response.data.id);
             sessionStorage.setItem("usernames", response.data.username);
             sessionStorage.setItem("email", response.data.email);
@@ -291,9 +314,9 @@
             socket.emit("new-user", response.data.username , response.data.id)
           })
           .catch(function (error) {
-            return error;
-
+            document.cookie = "example=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
           });
+          
       });
 
 
@@ -301,11 +324,7 @@
 // ---------------------------- data for client server --------------------
 
 
-// const chat_list = document.querySelector("li.list-data-btn");
-// // const htmlCollection = chat_list.children;
-// // var arr = Array.prototype.slice.call( htmlCollection )
 
-// console.log(chat_list);
 
 
 

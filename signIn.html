@@ -79,7 +79,7 @@ signIndata.addEventListener("submit", (event) => {
       window.location = "login.html";
     })
     .catch(function (error) {
-      console.log(error);
+      alert(error.response.data);
     });
 });
     </script>
