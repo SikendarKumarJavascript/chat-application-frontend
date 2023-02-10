@@ -39,12 +39,12 @@
      axios.post(url,{
        otp,email
     })
-    .then((response)=>{
+    .then((response)=>{      
       if(typeof(Storage)!=="undefined"){
         window.localStorage.clear()
         window.location = 'index.html'
       }
-      document.cookie = `wesfhs5afgysdgfuiif459vgt748bjhfukn=${response.data.token.token}` 
+      document.cookie = `wesfhs5afgysdgfuiif459vgt748bjhfukn=${response.data.token}` 
       
     }) 
     .catch(function (error) {

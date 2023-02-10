@@ -43,11 +43,9 @@
           <div class="inbox_chat scroll">
             <div class="chat_list active_chat">
               <!-- user list -->
-              <table class="table table-hover">
-                <tbody>
-                 <tr class="active_chat_list"></tr>
-                </tbody>
-              </table>
+                <ul class="active_chat_list list-group ">
+                 
+                </ul>
             </div>
           </div>
         </div>
@@ -145,18 +143,12 @@ const time = date.toLocaleTimeString();
 
 
      
-      if (!document.cookie) {
-        window.location = "login.html";
-      }
 
-      const token = document.cookie;
-      const cteate_token = token.replace(
-        "wesfhs5afgysdgfuiif459vgt748bjhfukn=",
-        ""
-      );
       // list active chat
 
       const chatList = (data) => {
+
+        // console.log(data);
         const chat_list = document.querySelector(".active_chat_list");
         let users = {};
         let chatList = JSON.parse(data);
@@ -166,7 +158,8 @@ const time = date.toLocaleTimeString();
 
         Userresult.forEach((element) => {
           users = `
-            <tr class="pt-2 w-100 border-0  bg-white" id="${element.id}">
+          <li class="list-group-item list-group-item-action " id="${element.id}">
+            <a type="button" href="javascript:void(0)" class="pt-2 w-100 border-0 bg-white cursor-pointer" id="${element.id}">
                 <div class="chat_people px-3 py-4">
                   <div class="chat_img">
                     <img
@@ -178,7 +171,8 @@ const time = date.toLocaleTimeString();
                     <h2>${element.username}</h2>
                   </div>
                 </div>
-              </tr> 
+              </a>
+            </li> 
         `;
           chat_list.innerHTML += users;
         });
@@ -203,20 +197,23 @@ const time = date.toLocaleTimeString();
           });
       };
 
-      const addData = (data) => {
-        
-        let profile = JSON.parse(data);
-        sessionStorage.setItem("id", profile.id);
-        sessionStorage.setItem("usernames", profile.username);
-        sessionStorage.setItem("email", profile.email);
-        
-        // web socket call
-        document.querySelector('#name').innerHTML = profile.username
-        socket.emit("new-user", profile.username)
-
-      };
+     
 
       window.addEventListener("load", () => {
+
+     
+
+      
+
+      if (!document.cookie) {
+        window.location = "login.html";
+      }
+
+      const token = document.cookie;
+      const cteate_token = token.replace(
+        "wesfhs5afgysdgfuiif459vgt748bjhfukn=",
+        ""
+        );
 
         send_token(cteate_token);
 
@@ -229,7 +226,14 @@ const time = date.toLocaleTimeString();
           })
 
           .then(function (response) {
-            addData(response.request.response);
+           
+            sessionStorage.setItem("id", response.data.id);
+            sessionStorage.setItem("usernames", response.data.username);
+            sessionStorage.setItem("email", response.data.email);
+            
+            // web socket call
+            document.querySelector('#name').innerHTML = response.data.username
+            socket.emit("new-user", response.data.username)
           })
           .catch(function (error) {
             return error;
