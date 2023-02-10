@@ -22,7 +22,40 @@
       </form>
    </div>
 
-    <script src="./script.js"></script>
+    <script>
+        
+// otp
+// var baseurl = "http://localhost:8082";
+var baseurl = "https://chat-server-data.onrender.com"
+const otpdata = document.querySelector('#otpdata')
+let email = window.localStorage.getItem("email")
+ if(!email){
+   window.location = 'login.html'
+ }
+ otpdata.addEventListener('submit', (event)=>{
+
+ event.preventDefault()
+ let otp = otpdata.otp.value
+ let url = `${baseurl}/api/otp`
+ let email = window.localStorage.getItem("email")
+  axios.post(url,{
+    otp,email
+ })
+ .then((response)=>{      
+   if(typeof(Storage)!=="undefined"){
+     window.localStorage.clear()
+     window.location = 'index.html'
+   }
+   document.cookie = `wesfhs5afgysdgfuiif459vgt748bjhfukn=${response.data.token}` 
+   
+ }) 
+ .catch(function (error) {
+ console.log(error.response.data);
+ });
+
+})
+
+    </script>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"></script>
 
